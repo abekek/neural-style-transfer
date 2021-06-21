@@ -34,25 +34,25 @@ provider:
 
 custom:
   pythonRequirements:
-  dockerizePip: true
-  zip: true
-  slim: true
-  strip: false
-  noDeploy:
-    - docutils
-    - jmespath
-    - pip
-    - python-dateutil
-    - setuptools
-    - six
-    - tensorboard
-  useStaticCache: true
-  useDownloadCache: true
-  cacheLocation: "./cache"
+    dockerizePip: true
+    zip: true
+    slim: true
+    strip: false
+    noDeploy:
+      - docutils
+      - jmespath
+      - pip
+      - python-dateutil
+      - setuptools
+      - six
+      - tensorboard
+    useStaticCache: true
+    useDownloadCache: true
+    cacheLocation: "./cache"
   warmup:
-  events:
-    - schedule: "rate(5 minutes)"
-  timeout: 50
+    events:
+      - schedule: "rate(5 minutes)"
+    timeout: 50
 
 package:
   individually: false

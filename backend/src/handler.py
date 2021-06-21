@@ -20,7 +20,7 @@ from torch.autograd import Variable
 import torchvision.utils as vutils
 from network.transformer_net import TransformerNet
 from network.vgg import Vgg16
-import utils
+# import utils
 import re
 
 # device = 'cuda'
@@ -52,7 +52,7 @@ def load_models(s3, bucket):
 gpu = -1
 
 s3 = boto3.client("s3")
-bucket = 'neural-style-transformer'
+bucket = 'neural_style_transformer'
 
 mapping_id_to_style = {
     0: "Rain Princess",
