@@ -1,3 +1,12 @@
 https://download.pytorch.org/whl/cpu/torch-1.1.0-cp37-cp37m-linux_x86_64.whl
 https://download.pytorch.org/whl/cpu/torchvision-0.3.0-cp37-cp37m-linux_x86_64.whl
-Pillow==6.2.1
+Pillow==8.2.0
+absl-py==0.12.0
+appdirs==1.4.4
+asgiref==3.3.4
+astunparse==1.6.3
+atomicwrites==1.4.0
+boto3==1.17.97
+botocore==1.20.97
+cachetools==4.2.2
+pipreqs==0.4.10

@@ -1,2 +1,4 @@
 /backend/.serverless
 /backend/node_modules
+/backend/cache
+/backend/*.zip

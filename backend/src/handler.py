@@ -6,9 +6,10 @@ except ImportError:
 
 import json
 from io import BytesIO
-import time
-import os
+import pathlib
 import base64
+import logging
+import re
 
 import boto3
 import numpy as np
@@ -17,13 +18,7 @@ from PIL import Image
 import torch
 import torchvision.transforms as transforms
 from torch.autograd import Variable
-import torchvision.utils as vutils
 from network.transformer_net import TransformerNet
-from network.vgg import Vgg16
-# import utils
-import re
-
-# device = 'cuda'
 
 def img_to_base64_str(img):
     buffered = BytesIO()
@@ -34,15 +29,20 @@ def img_to_base64_str(img):
     return img_str
 
 def load_models(s3, bucket):
+    logging.debug('loading models')
+    pathlib.Path(__file__).parent.resolve()
     styles = ["Rain Princess", "Candy", "Mosaic", "Udnie"]
-    style_paths = ['./saved_models/rain_princess.pth', './saved_models/candy.pth', './saved_models/mosaic.pth', './saved_models/udnie.pth']
+    style_paths = ['serverless/backend/dev/models/rain_princess.pth', 'serverless/backend/dev/models/candy.pth', 'serverless/backend/dev/models/mosaic.pth', 'serverless/backend/dev/models/udnie.pth']
     models = {}
 
     for i in range(len(style_paths)):
-        model = TransformerNet()
-        response = s3.get_object(
-            Bucket=bucket, Key=style_paths[i])
-        state = torch.load(BytesIO(response["Body"].read()))
+        with torch.no_grad():
+            model = TransformerNet()
+            response = s3.get_object(Bucket=bucket, Key=style_paths[i])
+            state = torch.load(BytesIO(response["Body"].read()))
+            for k in list(state.keys()):
+                if(re.search(r'in\d+\.running_(mean|var)$', k)):
+                    del state[k]
         model.load_state_dict(state)
         model.eval()
         models[styles[i]] = model
@@ -51,8 +51,10 @@ def load_models(s3, bucket):
 
 gpu = -1
 
+logging.debug('bucket loading')
 s3 = boto3.client("s3")
-bucket = 'neural_style_transformer'
+bucket = 'backend-dev-serverlessdeploymentbucket-1w4gicr8a38h8'
+logging.debug('bucket loaded')
 
 mapping_id_to_style = {
     0: "Rain Princess",
@@ -62,14 +64,14 @@ mapping_id_to_style = {
 }
 
 models = load_models(s3, bucket)
-print('models loaded...')
+logging.debug('models loaded...')
 
 def lambda_handler(event, context):
   """
   lambda handler to execute the image transformation
   """
   # warming up the lambda
-  if event.get("source") in ["aws.events", "serverless-plugin-warmup"]:
+  if(event.get("source") in ["aws.events", "serverless-plugin-warmup"]):
       print('Lambda is warm!')
       return {}
 
