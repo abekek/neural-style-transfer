@@ -66,6 +66,16 @@ mapping_id_to_style = {
 models = load_models(s3, bucket)
 logging.debug('models loaded...')
 
+# normalizing the float to uint8
+def normalize8(I):
+  mn = I.min()
+  mx = I.max()
+
+  mx -= mn
+
+  I = ((I - mn)/mx) * 255
+  return I.astype(np.uint8)
+
 def lambda_handler(event, context):
   """
   lambda handler to execute the image transformation
@@ -121,16 +131,8 @@ def lambda_handler(event, context):
       output_image = model(image)
       output_image = output_image[0]
 
-  # convert PIL image from BGR back to RGB
-  output_image = output_image[[2, 1, 0], :, :]
-
-  # transform values back to (0, 1)
-  output_image = output_image.data.cpu().float() * 0.5 + 0.5
-
-  # convert the transformed tensor to a PIL image
-  output_image = output_image.numpy()
-  output_image = np.uint8(output_image.transpose(1, 2, 0) * 255)
-  output_image = Image.fromarray(output_image)
+  output_image = normalize8(output_image.cpu().numpy())
+  output_image = Image.fromarray(output_image.transpose(1, 2, 0))
 
   # convert the PIL image to base64
   result = {
