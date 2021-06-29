@@ -2,3 +2,4 @@
 /backend/node_modules
 /backend/cache
 /backend/*.zip
+/frontend/node_modules
