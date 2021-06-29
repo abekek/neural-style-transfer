@@ -14,7 +14,6 @@ import * as loadImage from "blueimp-load-image";
 import GridLoader from "react-spinners/GridLoader";
 import beforePlaceholder from "../images/before.jpg";
 import afterPlaceholder from "../images/after.jpg";
-// import logo from "../images/logo.svg";
 
 import { triggerBase64Download } from "react-base64-downloader";
 import { transform } from "../api.js";
@@ -69,7 +68,6 @@ export default function Home() {
   return (
     <Box align="center">
       <div style={{ textAlign: "center", width: "100%" }}>
-        {/* <img src={logo} className={classes.logo} /> */}
         <h2>Neural Style Transfer Demo</h2>
         <p class="text-muted">See full code <a href="https://github.com/abekek/neural-style-transfer">here</a></p>
         <p class="text-danger">Note: if the model doesn't respond refresh the page. AWS Lambda may be sleeping</p>
