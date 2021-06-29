@@ -70,7 +70,9 @@ export default function Home() {
     <Box align="center">
       <div style={{ textAlign: "center", width: "100%" }}>
         {/* <img src={logo} className={classes.logo} /> */}
-        <p>Neural Style Transfer Demo</p>
+        <h2>Neural Style Transfer Demo</h2>
+        <p class="text-muted">See full code <a href="https://github.com/abekek/neural-style-transfer">here</a></p>
+        <p class="text-danger">Note: if the model doesn't respond refresh the page. AWS Lambda may be sleeping</p>
       </div>
       <div className={classes.holder}>
         <StyleSelector
